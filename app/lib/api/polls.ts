@@ -10,10 +10,17 @@ export const fetchPollByIdRequest = async (id: string) => {
   return res.data;
 };
 
-export const createPollRequest = async (data: { title: string; description?: string; options: string[] }) => {
+export const createPollRequest = async (data: {
+  title: string;
+  description?: string;
+  options: string[];
+  createdBy: string;
+  creatorName: string;
+}) => {
   const res = await api.post("/polls", data);
   return res.data;
 };
+
 
 export const closePollRequest = async (id: string) => {
   const res = await api.post(`/polls/${id}/close`);

@@ -24,6 +24,7 @@ export interface Poll {
   options: Option[];
   createdBy: string;
   createdAt: string;
+  creatorName: string;
   isClosed: boolean;
 }
 

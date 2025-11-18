@@ -40,7 +40,9 @@ export const fetchPollById = createAsyncThunk(
 // CREATE POLL
 export const createPoll = createAsyncThunk(
   "polls/createPoll",
-  async (data: { title: string; description?: string; options: string[] }, { rejectWithValue }) => {
+  async (data: 
+    { title: string; description?: string; options: string[]; createdBy: string; creatorName: string }, 
+    { rejectWithValue }) => {
     try {
       const res = await createPollRequest(data);
       return res.data;

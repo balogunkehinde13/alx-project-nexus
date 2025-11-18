@@ -5,15 +5,21 @@ import Input from "../ui/Input";
 import Button from "../ui/Button";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { createPoll } from "@/app/redux/slices/pollsSlice";
+import { getOrCreateGuestId } from "@/app/lib/utils/guest";
+import { useAppSelector } from "@/app/redux/hooks";
 import { useRouter } from "next/navigation";
 
 export default function PollCreateForm() {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const user = useAppSelector((state) => state.auth.user);
+
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [options, setOptions] = useState<string[]>(["", ""]); // two default fields
+  const [options, setOptions] = useState<string[]>(["", ""]); 
+  const [creatorName, setCreatorName] = useState("");
+
 
   const [errors, setErrors] = useState<{ title?: string; options?: string }>({});
 
@@ -63,12 +69,16 @@ export default function PollCreateForm() {
 
     const cleanOptions = options.filter((o) => o.trim() !== "");
 
+   const creatorId = user?.id || getOrCreateGuestId();
+
     const res = await dispatch(
-      createPoll({
+    createPoll({
         title,
         description,
         options: cleanOptions,
-      })
+        createdBy: creatorId,
+        creatorName: creatorName || "Anonymous",
+    })
     );
 
     // When successful, go to dashboard or the poll details page
@@ -80,6 +90,17 @@ export default function PollCreateForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6 max-w-xl mx-auto">
+
+      {/* Name Field */}
+      <div>
+        <Input
+            label="Your Name (optional)"
+            value={creatorName}
+            onChange={(e) => setCreatorName(e.target.value)}
+            placeholder="Enter your name or leave blank"
+        />
+      </div>
+
 
       {/* Title Field */}
       <div>

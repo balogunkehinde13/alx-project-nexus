@@ -14,6 +14,9 @@ export default function PollCard({ poll }: { poll: Poll }) {
           <p className="text-xs text-gray-500">
             {poll.options.length} options · {poll.isClosed ? "Closed" : "Open"}
           </p>
+          <p className="text-xs text-gray-500">
+            Created by {poll.creatorName}
+          </p>
         </div>
       </Card>
     </Link>
