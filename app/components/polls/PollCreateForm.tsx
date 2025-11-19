@@ -84,7 +84,11 @@ export default function PollCreateForm() {
     // When successful, go to dashboard or the poll details page
     // @ts-expect-error 404 error
     if (!res.error) {
-      router.push("/dashboard");
+      if (user) {
+        router.push("/dashboard");
+      } else {
+        router.push("/");
+      }
     }
   };
 

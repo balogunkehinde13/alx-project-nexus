@@ -45,7 +45,7 @@ export const createPoll = createAsyncThunk(
     { rejectWithValue }) => {
     try {
       const res = await createPollRequest(data);
-      return res.data;
+      return res;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
     } catch (err: any) {
       return rejectWithValue("Failed to create poll");

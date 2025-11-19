@@ -36,6 +36,7 @@ export interface PollsState {
 }
 
 export interface VoteResult {
+  text: string;
   optionId: string;
   votes: number;
 }
