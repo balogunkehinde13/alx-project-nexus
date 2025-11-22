@@ -1,22 +1,21 @@
-import { NextResponse } from "next/server";
 import prisma from "@/app/lib/prisma";
+import { NextResponse } from "next/server";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function GET(_: Request, { params }: any) {
+export async function GET(
+  req: Request,
+  ctx: { params: Promise<{ id: string }> }
+) {
+  const { id } = await ctx.params;  // ← FIXED
+  const pollId = id;
+
   const poll = await prisma.poll.findUnique({
-    where: { id: params.id },
+    where: { id: pollId },
     include: { options: true },
   });
 
+  if (!poll) {
+    return NextResponse.json({ error: "Poll not found" }, { status: 404 });
+  }
+
   return NextResponse.json(poll);
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function POST(_: Request, { params }: any) {
-  const updated = await prisma.poll.update({
-    where: { id: params.id },
-    data: { isClosed: true },
-  });
-
-  return NextResponse.json(updated);
 }

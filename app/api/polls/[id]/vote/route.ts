@@ -1,23 +1,53 @@
-import { NextResponse } from "next/server";
 import prisma from "@/app/lib/prisma";
+import { NextResponse } from "next/server";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function POST(req: Request, { params }: any) {
-  const { optionId } = await req.json();
+export async function POST(
+  req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
+  const { id } = await context.params;
+  const pollId = id;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const updatedOption = await prisma.option.update({
+  const body = await req.json();
+  const { optionId, voterId } = body;
+
+  if (!optionId || !voterId) {
+    return NextResponse.json(
+      { error: "Missing optionId or voterId" },
+      { status: 400 }
+    );
+  }
+
+  // Validate poll exists
+  const poll = await prisma.poll.findUnique({
+    where: { id: pollId },
+    include: { options: true },
+  });
+
+  if (!poll) {
+    return NextResponse.json({ error: "Poll not found" }, { status: 404 });
+  }
+
+  // Validate option belongs to poll
+  const option = poll.options.find((o) => o.id === optionId);
+  if (!option) {
+    return NextResponse.json({ error: "Invalid optionId" }, { status: 400 });
+  }
+
+  // Record the vote
+  await prisma.vote.create({
+    data: {
+      pollId,
+      optionId,
+      voterId, // must be a REAL STRING
+    },
+  });
+
+  // Increase vote count
+  await prisma.option.update({
     where: { id: optionId },
     data: { votes: { increment: 1 } },
   });
 
-  const poll = await prisma.poll.findUnique({
-    where: { id: params.id },
-    include: { options: true },
-  });
-
-  return NextResponse.json({
-    pollId: params.id,
-    results: poll?.options || [],
-  });
+  return NextResponse.json({ success: true });
 }

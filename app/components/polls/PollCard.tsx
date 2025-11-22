@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Card from "../ui/Card";
 import { Poll } from "@/app/interface";
+import CopyLinkButton from "../ui/CopyLinkButton";
 
 export default function PollCard({ poll }: { poll: Poll }) {
   return (
@@ -8,6 +9,8 @@ export default function PollCard({ poll }: { poll: Poll }) {
       <Card>
         <div className="space-y-2">
           <h3 className="text-xl font-semibold">{poll.title}</h3>
+          <CopyLinkButton pollId={poll.id} />
+
           <p className="text-gray-600 text-sm line-clamp-2">
             {poll.description || "No description provided."}
           </p>

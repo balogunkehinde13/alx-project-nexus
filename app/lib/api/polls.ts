@@ -27,7 +27,14 @@ export const closePollRequest = async (id: string) => {
   return res.data;
 };
 
-export const submitVoteRequest = async (pollId: string, optionId: string) => {
-  const res = await api.post(`/polls/${pollId}/vote`, { optionId });
-  return res.data;
+export const submitVoteRequest = async (
+  pollId: string,
+  optionId: string,
+  voterId: string
+) => {
+  return api.post(`/polls/${pollId}/vote`, {
+    optionId,
+    voterId,
+  });
 };
+

@@ -20,10 +20,10 @@ export interface Option {
 export interface Poll {
   id: string;
   title: string;
-  description?: string;
+  description?: string | null ;
   options: Option[];
   createdBy: string;
-  createdAt: string;
+  createdAt: string | Date;
   creatorName: string;
   isClosed: boolean;
 }

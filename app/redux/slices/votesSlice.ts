@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { VotesState } from "@/app/interface";
 import { submitVoteRequest } from "@/app/lib/api/polls";
+import api from "@/app/lib/axiosInstance";
 
 const initialState: VotesState = {
   liveResults: {},
@@ -11,9 +12,9 @@ const initialState: VotesState = {
 // SUBMIT A VOTE
 export const submitVote = createAsyncThunk(
   "votes/submitVote",
-  async (data: { pollId: string; optionId: string }, { rejectWithValue }) => {
+  async (data: { pollId: string; optionId: string, voterId: string }, { rejectWithValue }) => {
     try {
-      const res = await submitVoteRequest(data.pollId, data.optionId);
+      const res = await submitVoteRequest(data.pollId, data.optionId, data.voterId);
       return res.data;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -21,6 +22,16 @@ export const submitVote = createAsyncThunk(
     }
   }
 );
+
+// FETCH LIVE RESULTS
+export const fetchLiveResults = createAsyncThunk(
+  "votes/fetchLiveResults",
+  async (pollId: string) => {
+    const res = await api.get(`/polls/${pollId}`);
+    return { pollId, options: res.data.options };
+  }
+);
+
 
 const votesSlice = createSlice({
   name: "votes",
@@ -45,7 +56,12 @@ const votesSlice = createSlice({
       .addCase(submitVote.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      .addCase(fetchLiveResults.fulfilled, (state, action) => {
+        const { pollId, options } = action.payload;
+        state.liveResults[pollId] = options;
       });
+
   },
 });
 
