@@ -1,10 +1,14 @@
-import PollCard from "./PollCard";
-import { Poll } from "@/app/interface";
+"use client";
 
-export default function PollList({ polls }: { polls: Poll[] }) {
+import PollCard from "./PollCard";
+import { useAppSelector } from "@/app/redux/hooks";
+
+export default function PollList() {
+  const filtered = useAppSelector((s) => s.polls.filtered);
+
   return (
     <div className="grid gap-4">
-      {polls.map((poll) => (
+      {filtered.map((poll) => (
         <PollCard key={poll.id} poll={poll} />
       ))}
     </div>

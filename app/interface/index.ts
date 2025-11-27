@@ -30,6 +30,7 @@ export interface Poll {
 
 export interface PollsState {
   polls: Poll[];
+  filtered: Poll[];
   pollDetails: Poll | null;
   loading: boolean;
   error: string | null;
