@@ -1,24 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { setFilteredPolls } from "@/app/redux/slices/pollsSlice";
-import { Poll } from "@/app/interface";
 
 export default function PollSearchBar() {
   const dispatch = useAppDispatch();
-
-  // We pull polls directly from Redux
   const polls = useAppSelector((s) => s.polls.polls);
 
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("all");
 
-  useEffect(() => {
-    let result: Poll[] = polls;
+  // Memoized filter logic (avoids running every render)
+  const filtered = useMemo(() => {
+    let result = polls;
 
-    // Text search
-    if (query.trim() !== "") {
+    // text search
+    if (query.trim()) {
       const lower = query.toLowerCase();
       result = result.filter(
         (p) =>
@@ -27,22 +25,27 @@ export default function PollSearchBar() {
       );
     }
 
-    // Status filter
+    // status filter
     if (status === "open") {
       result = result.filter((p) => !p.isClosed);
     } else if (status === "closed") {
       result = result.filter((p) => p.isClosed);
     }
 
-    dispatch(setFilteredPolls(result));
-  }, [polls, query, status, dispatch]);
+    return result;
+  }, [polls, query, status]);
+
+  // Sync filtered list into Redux (only when filters change)
+  useEffect(() => {
+    dispatch(setFilteredPolls(filtered));
+  }, [filtered, dispatch]);
 
   return (
     <div className="space-y-4">
       {/* Search Field */}
       <input
         type="text"
-        placeholder="filter polls by title or creator…"
+        placeholder="Filter polls by title or creator…"
         className="w-full p-3 border rounded-lg"
         value={query}
         onChange={(e) => setQuery(e.target.value)}

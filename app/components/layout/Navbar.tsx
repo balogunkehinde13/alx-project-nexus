@@ -8,9 +8,7 @@ export default function Navbar() {
       <Link href="/" className="font-bold text-xl">Project Nexus</Link>
 
       <div className="flex gap-4">
-        <Link href="/login">Login</Link>
-        <Link href="/register">Register</Link>
-        <Link href="/dashboard">Dashboard</Link>
+        <h1>Poll App</h1>
       </div>
     </nav>
   );

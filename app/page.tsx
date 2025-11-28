@@ -1,17 +1,19 @@
+"use client";
+
+import { useEffect } from "react";
 import PollList from "@/app/components/polls/PollList";
 import PollSearchBar from "@/app/components/polls/PollSearchBar";
-import PollsHydrator from "@/app/components/polls/PollsHydrator";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { fetchAllPolls } from "@/app/redux/slices/pollsSlice";
 import Link from "next/link";
-import { fetchPollsRequest } from "@/app/lib/api/polls";
 
-export default async function LandingPage() {
-  let polls = [];
+export default function LandingPage() {
+  const dispatch = useAppDispatch();
 
-  try {
-    polls = await fetchPollsRequest();
-  } catch (err) {
-    console.error("Failed to fetch polls", err);
-  }
+  // fetch polls on mount (client-side)
+  useEffect(() => {
+    dispatch(fetchAllPolls());
+  }, [dispatch]);
 
   return (
     <div className="p-8 max-w-5xl mx-auto space-y-12">
@@ -28,9 +30,6 @@ export default async function LandingPage() {
           </Link>
         </div>
       </section>
-
-      {/* Inject server polls into Redux */}
-      <PollsHydrator polls={polls} />
 
       {/* Search & Filter */}
       <PollSearchBar />
