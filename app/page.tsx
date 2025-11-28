@@ -26,9 +26,6 @@ export default async function LandingPage() {
           <Link href="/create" className="px-6 py-3 bg-blue-600 text-white rounded-lg">
             Create a Poll
           </Link>
-          <Link href="/register" className="px-6 py-3 border rounded-lg">
-            Sign Up
-          </Link>
         </div>
       </section>
 
