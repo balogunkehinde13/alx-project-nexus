@@ -7,9 +7,11 @@ import { closePoll, deletePoll } from "@/app/redux/slices/pollsSlice";
 import { getOrCreateGuestId } from "@/app/lib/utils/guest";
 import PollResultsChart from "./PollResultsChart";
 import { Poll } from "@/app/interface";
+import { useRouter } from "next/navigation";
 
 export default function PollVoteClient({ poll }: { poll: Poll }) {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showCloseModal, setShowCloseModal] = useState(false);
 
@@ -77,7 +79,8 @@ export default function PollVoteClient({ poll }: { poll: Poll }) {
   // DELETE POLL HANDLER
   const handleDeletePoll = async () => {
     await dispatch(deletePoll({ pollId: poll.id, requesterId: userId }));
-    window.location.href = "/";
+    router.push("/");
+    router.refresh(); // ⭐ Force server re-fetch
   };
 
   return (
@@ -170,7 +173,8 @@ export default function PollVoteClient({ poll }: { poll: Poll }) {
                   // Only redirect if successful
                   if (result.meta.requestStatus === "fulfilled") {
                     setShowCloseModal(false);
-                    window.location.href = "/";
+                    router.push("/");
+                    router.refresh(); // ⭐ Force server re-fetch
                   }
                 }}
                 className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"

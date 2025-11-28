@@ -83,6 +83,7 @@ export default function PollCreateForm() {
     // @ts-expect-error 404 error
     if (!res.error) {
         router.push("/");
+        router.refresh(); // ⭐ This forces server to re-fetch
     }
   };
 
