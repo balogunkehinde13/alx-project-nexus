@@ -182,22 +182,22 @@ const pollsSlice = createSlice({
          CLOSE POLL
       ====================== */
       .addCase(closePoll.fulfilled, (state, action) => {
-        const updated = action.payload;
+  const updated = action.payload;
+  
+  // Safety check
+  if (!updated || !updated.id) return;
+  
+  state.pollDetails = updated;
 
-        // Safety check
-        if (!updated || !updated.id) return;
+  // Filter out undefined values and update
+  state.polls = state.polls
+    .filter(Boolean)
+    .map((p) => (p?.id === updated.id ? updated : p));
 
-        state.pollDetails = updated;
-
-        // Filter out undefined values and update
-        state.polls = state.polls
-          .filter(Boolean)
-          .map((p) => (p?.id === updated.id ? updated : p));
-
-        state.filtered = state.filtered
-          .filter(Boolean)
-          .map((p) => (p?.id === updated.id ? updated : p));
-      })
+  state.filtered = state.filtered
+    .filter(Boolean)
+    .map((p) => (p?.id === updated.id ? updated : p));
+})
 
       /* =====================
          DELETE POLL

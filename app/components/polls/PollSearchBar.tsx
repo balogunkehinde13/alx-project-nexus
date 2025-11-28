@@ -6,13 +6,17 @@ import { setFilteredPolls } from "@/app/redux/slices/pollsSlice";
 
 export default function PollSearchBar() {
   const dispatch = useAppDispatch();
-  const polls = useAppSelector((s) => s.polls.polls);
+  // guard against undefined store slice
+  const pollsFromStore = useAppSelector((s) => (s?.polls ? s.polls.polls : []));
+  
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const polls = Array.isArray(pollsFromStore) ? pollsFromStore : [];
 
   const [query, setQuery] = useState("");
-  const [status, setStatus] = useState("all");
+  const [status, setStatus] = useState<"all" | "open" | "closed">("all");
 
-  // Memoized filter logic (avoids running every render)
   const filtered = useMemo(() => {
+    // operate on a local copy so we never mutate store data
     let result = polls;
 
     // text search
@@ -20,8 +24,8 @@ export default function PollSearchBar() {
       const lower = query.toLowerCase();
       result = result.filter(
         (p) =>
-          p.title.toLowerCase().includes(lower) ||
-          p.creatorName.toLowerCase().includes(lower)
+          String(p.title ?? "").toLowerCase().includes(lower) ||
+          String(p.creatorName ?? "").toLowerCase().includes(lower)
       );
     }
 
@@ -29,7 +33,7 @@ export default function PollSearchBar() {
     if (status === "open") {
       result = result.filter((p) => !p.isClosed);
     } else if (status === "closed") {
-      result = result.filter((p) => p.isClosed);
+      result = result.filter((p) => !!p.isClosed);
     }
 
     return result;
@@ -37,6 +41,7 @@ export default function PollSearchBar() {
 
   // Sync filtered list into Redux (only when filters change)
   useEffect(() => {
+    if (!Array.isArray(filtered)) return;
     dispatch(setFilteredPolls(filtered));
   }, [filtered, dispatch]);
 

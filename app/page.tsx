@@ -1,23 +1,22 @@
-"use client";
-
-import { useEffect } from "react";
 import PollList from "@/app/components/polls/PollList";
 import PollSearchBar from "@/app/components/polls/PollSearchBar";
-import { useAppDispatch } from "@/app/redux/hooks";
-import { fetchAllPolls } from "@/app/redux/slices/pollsSlice";
+import PollsHydrator from "@/app/components/polls/PollsHydrator";
 import Link from "next/link";
+import { fetchPollsRequest } from "@/app/lib/api/polls";
 
-export default function LandingPage() {
-  const dispatch = useAppDispatch();
+export default async function LandingPage() {
+  let polls = [];
 
-  // fetch polls on mount (client-side)
-  useEffect(() => {
-    dispatch(fetchAllPolls());
-  }, [dispatch]);
+  try {
+    polls = await fetchPollsRequest();
+  } catch (err) {
+    console.error("Failed to fetch polls", err);
+  }
 
   return (
     <div className="p-8 max-w-5xl mx-auto space-y-12">
 
+      {/* HERO */}
       <section className="text-center space-y-4">
         <h1 className="text-4xl font-bold">Create Instant Polls</h1>
         <p className="text-lg text-gray-600 max-w-xl mx-auto">
@@ -30,6 +29,9 @@ export default function LandingPage() {
           </Link>
         </div>
       </section>
+
+      {/* 🔥 Hydrate Redux BEFORE search / list components */}
+      <PollsHydrator polls={polls} />
 
       {/* Search & Filter */}
       <PollSearchBar />

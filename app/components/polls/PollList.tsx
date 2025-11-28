@@ -4,14 +4,11 @@ import PollCard from "./PollCard";
 import { useAppSelector } from "@/app/redux/hooks";
 
 export default function PollList() {
-  const filtered = useAppSelector((s) => s.polls.filtered);
+  const filteredFromStore = useAppSelector((s) => (s?.polls ? s.polls.filtered : []));
+  const filtered = Array.isArray(filteredFromStore) ? filteredFromStore : [];
 
-  if (!filtered || filtered.length === 0) {
-    return (
-      <p className="text-gray-500 text-center py-6">
-        No polls found.
-      </p>
-    );
+  if (filtered.length === 0) {
+    return <p className="text-gray-500 text-center py-6">No polls found.</p>;
   }
 
   return (
