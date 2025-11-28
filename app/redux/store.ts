@@ -1,11 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "./slices/authSlice";
 import pollsReducer from "./slices/pollsSlice";
 import votesReducer from "./slices/votesSlice";
 
 const store = configureStore({
   reducer: {
-    auth: authReducer,
     polls: pollsReducer,
     votes: votesReducer,
   },
