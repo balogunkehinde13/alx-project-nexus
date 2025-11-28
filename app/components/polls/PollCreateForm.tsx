@@ -6,13 +6,11 @@ import Button from "../ui/Button";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { createPoll } from "@/app/redux/slices/pollsSlice";
 import { getOrCreateGuestId } from "@/app/lib/utils/guest";
-import { useAppSelector } from "@/app/redux/hooks";
 import { useRouter } from "next/navigation";
 
 export default function PollCreateForm() {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const user = useAppSelector((state) => state.auth.user);
 
 
   const [title, setTitle] = useState("");
@@ -69,7 +67,7 @@ export default function PollCreateForm() {
 
     const cleanOptions = options.filter((o) => o.trim() !== "");
 
-   const creatorId = user?.id || getOrCreateGuestId();
+   const creatorId = getOrCreateGuestId();
 
     const res = await dispatch(
     createPoll({
@@ -84,11 +82,7 @@ export default function PollCreateForm() {
     // When successful, go to dashboard or the poll details page
     // @ts-expect-error 404 error
     if (!res.error) {
-      if (user) {
-        router.push("/dashboard");
-      } else {
         router.push("/");
-      }
     }
   };
 
