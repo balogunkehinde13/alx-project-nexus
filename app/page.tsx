@@ -4,6 +4,10 @@ import PollsHydrator from "@/app/components/polls/PollsHydrator";
 import Link from "next/link";
 import { fetchPollsRequest } from "@/app/lib/api/polls";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const fetchCache = 'force-no-store';
+
 export default async function LandingPage() {
   let polls = [];
 
