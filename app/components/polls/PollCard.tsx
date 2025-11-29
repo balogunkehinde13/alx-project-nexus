@@ -5,21 +5,41 @@ import CopyLinkButton from "../ui/CopyLinkButton";
 
 export default function PollCard({ poll }: { poll: Poll }) {
   return (
-    <Link href={`/poll/${poll.id}`}>
-      <Card>
-        <div className="space-y-2">
-          <h3 className="text-xl font-semibold">{poll.title}</h3>
-          <CopyLinkButton pollId={poll.id} />
+    <Link href={`/poll/${poll.id}`} className="block">
+      <Card className="p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition-all hover:-translate-y-0.5 bg-white">
+        <div className="space-y-3">
 
-          <p className="text-gray-600 text-sm line-clamp-2">
-            {poll.description || "No description provided."}
+          {/* Title Row */}
+          <div className="flex items-start justify-between gap-3">
+            <h3 className="text-lg md:text-2xl font-bold text-slate-900 leading-tight">
+              {poll.title}
+            </h3>
+            <CopyLinkButton pollId={poll.id} />
+          </div>
+
+          {/* Description */}
+          <p className="text-slate-600 font-medium line-clamp-2">
+           <span className="italic">Description: </span> 
+           {poll.description || "No description provided."}
           </p>
-          <p className="text-xs text-gray-500">
-            {poll.options.length} options · {poll.isClosed ? "Closed" : "Open"}
-          </p>
-          <p className="text-xs text-gray-500">
-            Created by {poll.creatorName}
-          </p>
+
+          {/* Status + Meta */}
+          <div className="flex items-center justify-between text-slate-500 pt-1">
+            <span>
+              {poll.options.length} options ·{" "}
+              <span
+                className={
+                  poll.isClosed
+                    ? "text-red-600 "
+                    : "text-green-600 "
+                }
+              >
+                {poll.isClosed ? "Closed" : "Open"}
+              </span>
+            </span>
+
+            <span>By {poll.creatorName}</span>
+          </div>
         </div>
       </Card>
     </Link>

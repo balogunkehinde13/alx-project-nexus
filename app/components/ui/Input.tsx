@@ -6,13 +6,23 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
 };
 
-export default function Input({ label, ...props }: InputProps) {
+export default function Input({ label, className = "", ...props }: InputProps) {
   return (
     <div className="flex flex-col gap-1">
-      {label && <label className="text-sm font-medium">{label}</label>}
+      {label && <label className="text-sm font-medium text-gray-700">{label}</label>}
+
       <input
         {...props}
-        className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        className={`
+          w-full px-3 py-2
+          rounded-xl
+          bg-gray-50
+          border border-gray-300
+          placeholder-gray-400
+          focus:outline-none focus:ring-2 focus:ring-indigo-500
+          transition
+          ${className}
+        `.trim().replace(/\s+/g, ' ')}
       />
     </div>
   );

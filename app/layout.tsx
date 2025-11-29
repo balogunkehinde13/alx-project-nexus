@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Poll App",
+  title: "PulseVote - Instant Polls",
   description: "Create and participate in polls easily.",
 };
 
@@ -32,7 +32,7 @@ export default function RootLayout({
         <Providers>
           <Navbar />
           {children}
-          </Providers>
+        </Providers>
       </body>
     </html>
   );

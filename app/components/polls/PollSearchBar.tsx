@@ -46,21 +46,21 @@ export default function PollSearchBar() {
   }, [filtered, dispatch]);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 gap-10 md:mx-16 flex flex-col md:flex-row md:items-center md:justify-between">
       {/* Search Field */}
       <input
         type="text"
-        placeholder="Filter polls by title or creator…"
-        className="w-full p-3 border rounded-lg"
+        placeholder="Search polls by title or creator…"
+        className="w-full p-5 shadow-md bg-white rounded-lg"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
 
       {/* Status Filter */}
-      <div className="flex gap-3">
+      <div className="flex gap-3 self-start bg-white p-3 rounded-lg shadow-md">
         <button
           className={`px-4 py-2 rounded-lg ${
-            status === "all" ? "bg-indigo-600 text-white" : "bg-gray-200"
+            status === "all" ? "bg-linear-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all text-white" : "bg-gray-200"
           }`}
           onClick={() => setStatus("all")}
         >
@@ -69,7 +69,7 @@ export default function PollSearchBar() {
 
         <button
           className={`px-4 py-2 rounded-lg ${
-            status === "open" ? "bg-indigo-600 text-white" : "bg-gray-200"
+            status === "open" ? "bg-linear-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all text-white" : "bg-gray-200"
           }`}
           onClick={() => setStatus("open")}
         >
@@ -78,7 +78,7 @@ export default function PollSearchBar() {
 
         <button
           className={`px-4 py-2 rounded-lg ${
-            status === "closed" ? "bg-indigo-600 text-white" : "bg-gray-200"
+            status === "closed" ? "bg-linear-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all text-white" : "bg-gray-200"
           }`}
           onClick={() => setStatus("closed")}
         >
