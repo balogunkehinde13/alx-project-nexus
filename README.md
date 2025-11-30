@@ -75,7 +75,7 @@ The primary objectives of the project are:
 - **React / Next.js** – For component-based UI and SSR.  
 - **Redux Toolkit** – To handle global state management and real-time updates.  
 - **TypeScript** – Ensuring type safety and maintainable code.  
-- **Charting Library (e.g., Recharts or Chart.js)** – For data visualization of poll results.  
+- **Charting Library Chart.js** – For data visualization of poll results.  
 - **TailwindCSS** – For responsive design and flexible UI styling.  
 
 ### 🌟 Key Features
